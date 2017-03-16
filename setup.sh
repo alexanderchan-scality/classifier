@@ -10,3 +10,8 @@ then
 	mkdir img
 fi
 
+unzip img.zip
+if [ ! -d ./output ]
+then
+	mv output img
+fi
