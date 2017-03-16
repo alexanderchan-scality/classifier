@@ -9,6 +9,4 @@ if [ ! -d ./img ]
 then
 	mkdir img
 fi
-unzip portraits2.zip
-mv portraits2 img
 
