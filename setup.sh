@@ -11,7 +11,7 @@ then
 fi
 
 unzip img.zip
-if [ ! -d ./output ]
+if [ -d ./output ]
 then
 	mv output img
 fi

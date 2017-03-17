@@ -17,11 +17,11 @@ import argparse
 
 cur_photo, img_list, cur_id = None, None, None
 root, photo_id = None, None
-res_dir = './.res/'
-best_dir = './.res/best/'
-good_dir = './.res/good/'
-bad_dir = './.res/bad/'
-ok_dir = './.res/ok/'
+res_dir = './res/'
+best_dir = './res/best/'
+good_dir = './res/good/'
+bad_dir = './res/bad/'
+ok_dir = './res/ok/'
 img_dir = './img/'
 result_file = './result_file'
 username, name = None, None
@@ -40,6 +40,7 @@ def build_parser():
 def updateImage():
 	global cur_photo, img_list, cur_id, progress
 	img_list_size = len(img_list)
+	base_name = os.path.basename(img_list[cur_id])
 	if (total_cnt):
 		percent = int((1 - img_list_size / float(total_cnt)) * 100)
 	else:
@@ -49,8 +50,8 @@ def updateImage():
 		cur_photo = ImageTk.PhotoImage(PIL.Image.open(img_list[cur_id]))
 		img_l.configure(image=cur_photo, compound=CENTER, width=600) 
 		img_l.image = cur_photo
-		img_t.configure(text="Rate Image #" + str(photo_id[cur_id]), compound=CENTER, width=600)
-		w.configure(text="Press ['d' for Bad] ['f' for Ok] ['j' for Good] ['k' for Best] [<esc> to exit]", compound=CENTER, width=600)
+		img_t.configure(text="Rate Image #" + str(photo_id[cur_id]) + " : " + base_name, compound=CENTER, width=600)
+		w.configure(text="Press ['left' for Bad] ['down' for Ok] ['right' for Good] [<esc> to exit]", compound=CENTER, width=600)
 		progress.configure(text="Progress: " + str(percent) + "%", width=600)
 	else:
 		img_l.configure(image='', borderwidth=0, highlightthickness=0, width=600)
@@ -67,27 +68,21 @@ def movefile(press):
 		base_name = os.path.basename(img_list[cur_id])
 		del photo_id[cur_id]
 		del img_list[cur_id]
-		if (press == 'd'):
+		if (press == 'Left'):
 			new_path = bad_dir + base_name
 			message = "Image " + str(old_id) + " moved to Bad"
 			m.configure(text=message)
 			shutil.move(old_path, new_path)
 			updateImage()
-		elif (press == 'f'):
+		elif (press == 'Down'):
 			new_path = ok_dir + base_name
 			message = "Image " + str(old_id) + " moved to Ok"
 			m.configure(text=message)
 			shutil.move(old_path, new_path)
 			updateImage()
-		elif (press == 'j'):
+		elif (press == 'Right'):
 			new_path = good_dir + base_name
 			message = "Image " + str(old_id) + " moved to Good"
-			m.configure(text=message)
-			shutil.move(old_path, new_path)
-			updateImage()
-		elif (press == 'k'):
-			new_path = best_dir + base_name
-			message = "Image " + str(old_id) + " moved to Best"
 			m.configure(text=message)
 			shutil.move(old_path, new_path)
 			updateImage()
@@ -108,8 +103,8 @@ def keypress(event):
 			root.destroy()
 	else:
 		pass
-		press = event.char
-		if (press in ['d', 'f', 'j', 'k']):
+		press = event.keysym
+		if (press in ['Left', 'Down', 'Right']):
 			movefile(press)
 		else:
 			pass
@@ -193,9 +188,10 @@ def main():
 			img_l = Label(root, image=cur_photo, compound=CENTER, width=600)
 			img_l.image = cur_photo
 			img_l.pack()
-			img_t = Label(root, text="Rate Image #" + str(photo_id[cur_id]), compound=CENTER, width=600)
+			base_name = os.path.basename(img_list[cur_id])
+			img_t = Label(root, text="Rate Image #" + str(photo_id[cur_id]) + " : " + base_name, compound=CENTER, width=600)
 			img_t.pack()
-			w = Label(root, text="Press ['d' for Bad] ['f' for Ok] ['j' for Good] ['k' for Best] [<esc> to exit]", compound=CENTER, width=600)
+			w = Label(root, text="Press ['left' for Bad] ['down' for Ok] ['right' for Good] [<esc> to exit]", compound=CENTER, width=600)
 			w.pack()
 			m = Label(root, text="", width=600)
 			m.pack() 
