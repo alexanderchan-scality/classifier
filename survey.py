@@ -40,7 +40,6 @@ def build_parser():
 def updateImage():
 	global cur_photo, img_list, cur_id, progress
 	img_list_size = len(img_list)
-	base_name = os.path.basename(img_list[cur_id])
 	if (total_cnt):
 		percent = int((1 - img_list_size / float(total_cnt)) * 100)
 	else:
@@ -50,6 +49,7 @@ def updateImage():
 		cur_photo = ImageTk.PhotoImage(PIL.Image.open(img_list[cur_id]))
 		img_l.configure(image=cur_photo, compound=CENTER, width=600) 
 		img_l.image = cur_photo
+		base_name = os.path.basename(img_list[cur_id])
 		img_t.configure(text="Rate Image #" + str(photo_id[cur_id]) + " : " + base_name, compound=CENTER, width=600)
 		w.configure(text="Press ['left' for Bad] ['down' for Ok] ['right' for Good] [<esc> to exit]", compound=CENTER, width=600)
 		progress.configure(text="Progress: " + str(percent) + "%", width=600)
