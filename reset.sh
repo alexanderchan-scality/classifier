@@ -1,6 +1,6 @@
 #!/bin/sh
 
-if [ ! -d ./.res ]
+if [ ! -d ./res ]
 then
 	echo "Result folder not found"
 else
